@@ -11,3 +11,9 @@ This map shows each state's favorite cuisine by comparing the average ratings of
 
 Viz #2: Popular Cuisine Bar Graph (https://andert97.github.io/INFO474-Final-Project/viz2/)
 This bar graph shows the count of restaurants for a select group of cuisines. A user can filter this by city to see how the popular cuisines change. If the user hovers over the bar they can see the exact count of restaurants. This answers our question because it shows how taste in cuisine changes for different cities.
+
+Viz #3: Ratings vs Restaurants in Las Vegas (https://andert97.github.io/INFO474-Final-Project/pokeGraph/)
+
+Viz #4: Map of Las Vegas with Restaurants (https://public.tableau.com/profile/bradley.balansay#!/vizhome/YelpMapViz/MapViz?publish=yes)
+
+Viz #5: Number of Reviews vs Ratings (https://public.tableau.com/profile/tabitha.anderson#!/vizhome/INFO474VizinTooltip/MainVizinTooltip?publish=yes)
