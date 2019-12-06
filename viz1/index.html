@@ -4,7 +4,6 @@
     <title>Yelp Visualization 1</title>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="plot.js"></script>
     <style type="text/css">
 /* On mouse hover, lighten state color */
 path:hover {
@@ -13,9 +12,9 @@ path:hover {
 /* Style for Custom Tooltip */
 div.tooltip {   
  	position: absolute;           
-	text-align: center;           
-	width: 100px;                  
-	height: 25px;                 
+	text-align: left;           
+	width: 200px;                  
+	height: 200px;                 
 	padding: 5px;             
 	font: 12px sans-serif;        
 	background: white;   
@@ -85,11 +84,9 @@ body {
                 
                 // Grab State Name
                 var dataState = data[i].State;
-                //console.log(dataState);
                 
                 // Grab data value 
                 var american = data[i].avg_american;
-                // console.log(american);
                 var chinese = data[i].avg_chinese;
                 var indian = data[i].avg_indian;
                 var italian = data[i].avg_italian;
@@ -117,24 +114,24 @@ body {
                 if (mexican > japanese) {
                     popCuisine = 5
                 }
-                // console.log(popCuisine);
                 
                 // Find the corresponding state inside the GeoJSON
                 for (var j = 0; j < json.features.length; j++)  {
                     var jsonState = json.features[j].properties.name;
-                    // console.log(jsonState);
                     if (dataState == jsonState) {
-                        //console.log(dataState);
-                        // Copy the data value into the JSON
+                        
                     json.features[j].properties.popCuisine = popCuisine; 
-                    //console.log(popCuisine);
-                    // Stop looking through the JSON
+                    
                     break;
                     }
                 }
             }
+
+            var svgContainer = d3.select("div").append("svg")
+                                            .attr("width", 200)
+                                            .attr("height", 200);
             
-            // Bind the data to the SVG and create one path per GeoJSON feature
+            // Bind data the SVG and create one path per GeoJSON feature
             svg.selectAll("path")
                 .data(json.features)
                 .enter()
@@ -157,10 +154,108 @@ body {
                     div.transition()        
                     .duration(200)      
                     .style("opacity", .9);  
-                    //console.log(d.properties.name);    
-                    barChart(d.properties.name, d3.csv("state_cuisines_avgs.csv"));
-                        div.style("left", (d3.event.pageX) + "px")     
-                        .style("top", (d3.event.pageY - 28) + "px");    
+
+                    var stateName = d.properties.name;
+                    var cuisines = {}
+                    for (var s = 0; s < data.length; s++) {
+                        var state = data[s].State;
+                        if (stateName == state) {
+                            var american = data[s].avg_american;
+                            var chinese = data[s].avg_chinese;
+                            var indian = data[s].avg_indian;
+                            var italian = data[s].avg_italian;
+                            var japanese = data[s].avg_japanese;
+                            var mexican = data[s].avg_mexican;
+                            cuisines = {american, chinese, indian, italian, japanese, mexican};
+                        }
+                    }
+
+                    div.style("left", (d3.event.pageX) + "px")     
+                        .style("top", (d3.event.pageY - 28) + "px");  
+                        
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 10)
+                            .attr("width", cuisines.american * 40)
+                            .attr("height", 20)
+                            .attr("fill", "yellow");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.american * 40) + 15)
+                            .attr('y', 22)
+                            .style('font-size', '5pt')
+                            .text(cuisines.american);
+                        
+                            //chinese
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 40)
+                            .attr("width", cuisines.chinese * 40)
+                            .attr("height", 20)
+                            .attr("fill", "rgb(245, 194, 66)");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.chinese * 40) + 15)
+                            .attr('y', 52)
+                            .style('font-size', '5pt')
+                            .text(cuisines.chinese);
+
+                        //indian
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 70)
+                            .attr("width", cuisines.indian * 40)
+                            .attr("height", 20)
+                            .attr("fill", "rgb(167, 66, 245)");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.indian * 40) + 15)
+                            .attr('y', 82)
+                            .style('font-size', '5pt')
+                            .text(cuisines.indian);
+
+                        //italian
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 100)
+                            .attr("width", cuisines.italian * 40)
+                            .attr("height", 20)
+                            .attr("fill", "rgb(217,91,67)");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.italian * 40) + 15)
+                            .attr('y', 112)
+                            .style('font-size', '5pt')
+                            .text(cuisines.italian);
+
+                        //japanese
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 130)
+                            .attr("width", cuisines.japanese * 40)
+                            .attr("height", 20)
+                            .attr("fill", "rgb(84,36,55)");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.japanese * 40) + 15)
+                            .attr('y', 142)
+                            .style('font-size', '5pt')
+                            .text(cuisines.japanese);
+
+                        //mexican
+                        svgContainer.append("rect")
+                            .attr("x", 10)
+                            .attr("y", 160)
+                            .attr("width", cuisines.mexican * 40)
+                            .attr("height", 20)
+                            .attr("fill", "rgb(69,173,168)");
+
+                        svgContainer.append('text')
+                            .attr('x', (cuisines.mexican * 40) + 15)
+                            .attr('y', 172)
+                            .style('font-size', '5pt')
+                            .text(cuisines.mexican);
+   
                     })   
                 
                 // fade out tooltip on mouse out               
@@ -168,6 +263,7 @@ body {
                     div.transition()        
                     .duration(500)      
                     .style("opacity", 0);   
+                    svgContainer.selectAll("*").remove();
                 });
             
 
@@ -197,7 +293,5 @@ body {
 
     
 </script>
-    <div id="popChart">
-        </div>
 </body>
 </html>
